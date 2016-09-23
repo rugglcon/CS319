@@ -30,7 +30,7 @@
                     <div id="googleMap"></div>
                 </div>
                 <div class="row text-center">
-                    <form>
+                    <form id="loc-form">
                         <div class="form-group">
                             <button type="button" class="location-button" onclick="goToRichardsonCourt()">Richardson Court</button>
                             <button type="button" class="location-button" onclick="goToUnionDrive()">Union Drive Area</button>
@@ -56,7 +56,7 @@
             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <div class="side-panel">
                     <div class="cgroup-panel">
-                        <h5 id="location-time">Location Time</h5><button type="button" class="join-button pull-right" data-toggle="modal" data-target="#signup">Join</button>
+                        <h5 id="location-time">Location Time</h5><button type="button" id="btn1" class="join-button pull-right" onclick="openModal()">Join</button>
                         <p id="leader-names">Name/Name</p>
                         <p id="address">1234 address, city state, 12345</p>
                     </div>
@@ -88,19 +88,74 @@
                 </div>
             </div>
         </div>
-        <div id="signup" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">C-Group Signup</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Some text in the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+        <div id="signup" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span id="close-modal" class="close">&times;</span>
+                    <h4 class="modal-title">C-Group Signup</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Please fill in all fields.</p>
+                    <form class="modal-form">
+                        <div>
+                            <div class="form-group">
+                                <label class="modal-label" for="name">Name:</label>
+                                <input required id="name" type="text" pattern="[A-Z,a-z ]{1,}">
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="email">Email:</label>
+                                <input required id="email" type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}">
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="phone">Phone:</label>
+                                <input required id="phone" type="text" pattern="[0-9]{10}|[0-9]{3}[-]\d{3}[\-]\d{4}">
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="gender">Gender:</label>
+                                <select required id="gender" class="modal-dropdown">
+                                    <option value="">-- Select --</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="location">Location:</label>
+                                <select required id="location" class="modal-dropdown">
+                                    <option value="">-- Select --</option>
+                                    <option value="rca">Richardson Court Area</option>
+                                    <option value="uniondrive">Union Drive</option>
+                                    <option value="greek">Greek</option>
+                                    <option value="mwl">Maple/Willow/Larch</option>
+                                    <option value="buchanan">Buchanan</option>
+                                    <option value="towers">Towers</option>
+                                    <option value="east">East Ames</option>
+                                    <option value="west">West Ames</option>
+                                    <option value="north">North Ames</option>
+                                    <option value="south">South Ames</option>
+                                    <option value="freddy">Freddy</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="year">Year:</label>
+                                <select required id="year" class="modal-dropdown">
+                                    <option value="">-- Select --</option>
+                                    <option value="freshman">Freshman</option>
+                                    <option value="sophomore">Sophomore</option>
+                                    <option value="Junior">Junior</option>
+                                    <option value="Senior">Senior</option>
+                                    <option value="grad">Grad</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="otherDiv">
+                                <label class="modal-label" for="other-explanation">Explain:</label>
+                                <input id="other-explanation" type="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="submit-modal">Submit</button>
                 </div>
             </div>
         </div>

@@ -1,12 +1,14 @@
 var map;
-var saltLogo = '../Images/salt_logo_small.jpg';
-var marksFace = new google.maps.MarkerImage('../Images/salt_teal_white_small.png',
+var marksFace = new google.maps.MarkerImage('../Images/salt_teal_white_border.png',
     new google.maps.Size(40, 40),
     new google.maps.Point(0, 0),
     new google.maps.Point(20, 20));
 var userLocation;
 var geocoder;
 var apiKey = "AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4";
+var modal;
+var span;
+var btn;
 
 function initializeISU() {
     initialize(42.027005, -93.646661, 15);
@@ -83,6 +85,7 @@ var listener1 = google.maps.event.addDomListener(window, 'load', function() {
     initializeISU();
 });
 
+//Centers the map to show the desied location
 function goToCurrentLocation() {
     map.setCenter(userLocation.position);
 }
@@ -132,17 +135,80 @@ function goToGreek() {
     cGroupInfo("Greek");
 }
 
-// var enteredAddressField;
-// $(docuemnt).ready(function() {
-//     enteredAddressField = document.getElementById("entered-address");
-//     enteredAddressField.addEventListener("keydown", function(event) {
-//         if (event.keyCode == 13) {
-//             goToEnteredAddress();
-//         }
-//     });
-// });
-
 window.onload = function() {
+    modal = document.getElementById('signup');
+    span = document.getElementById("close-modal");
+    submit = document.getElementById('submit-modal');
+    btn = document.getElementById("btn1");
+    selectYear = document.getElementById("year");
+    btn.onclick = openModal;
+    var name = document.getElementById("name");
+    var email = document.getElementById("email");
+    var phone = document.getElementById("phone");
+    var gender = document.getElementById("gender");
+    var location = document.getElementById("location");
+    var year = document.getElementById("year");
+
+    function validColor(obj) {
+        if (obj.validity.valid) {
+            obj.style.boxShadow = "none";
+            obj.style.border = "1px solid #ABABAB";
+        } else {
+            obj.style.boxShadow = "0 0 5px rgba(255, 0, 0, 1)";
+            obj.style.border = "1px solid rgba(255, 0, 0, 1)";
+        }
+    }
+
+    name.onchange = function() {
+        validColor(name);
+    }
+    email.onchange = function() {
+        validColor(email);
+    }
+    phone.onchange = function() {
+        validColor(phone);
+    }
+    gender.onchange = function() {
+        validColorDrop(gender);
+    }
+    location.onchange = function() {
+        validColorDrop(location);
+    }
+    year.onchange = function() {
+        validColorDrop(year);
+    }
+
+    function validColorDrop(obj) {
+        if (obj.value == "") {
+            obj.style.border = "1px solid red";
+            obj.style.boxShadow = "0 0 5px rgba(255, 0, 0, 1)";
+        } else {
+            obj.style.border = "1px solid #ABABAB";
+            obj.style.boxShadow = "none";
+        }
+    }
+
+    selectYear.onchange = function() {
+        if (selectYear.value == "other") {
+            document.getElementById("otherDiv").style.display = "block";
+        } else {
+            document.getElementById("otherDiv").style.display = "none";
+        }
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    submit.onclick = function() {
+        checkValid();
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
     document.querySelector('#entered-address').addEventListener('keypress', function(e) {
         var key = e.which || e.keyCode;
         if (key === 13) {
@@ -150,6 +216,48 @@ window.onload = function() {
             goToEnteredAddress();
         }
     })
+
+    function openModal() {
+        modal.style.display = "block";
+    }
+
+    function val(obj, bool) {
+        if (!obj.validity.valid) {
+            bool = false;
+        }
+        return bool;
+    }
+
+    function valDropDown(obj, bool) {
+        if (obj.value == "") {
+            obj.style.bocShadow = "0 0 5px red";
+            obj.style.border = "red";
+            bool = false;
+        }
+        return bool;
+    }
+
+    function validate() {
+        var isValid = true;
+        namebool = val(name, isValid);
+        emailbool = val(email, isValid);
+        phonebool = val(phone, isValid);
+        genderbool = valDropDown(gender, isValid);
+        locbool = valDropDown(location, isValid);
+        yearbool = valDropDown(year, isValid);
+        if ((namebool && emailbool && phonebool && genderbool && locbool && yearbool) == false) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    function checkValid() {
+        var bool = validate();
+        if (bool) {
+            //TODO - the information within the modal must be transfered into the database
+            modal.style.display = "none";
+        }
+    }
 }
 
 function goToEnteredAddress() {
@@ -168,15 +276,13 @@ function goToEnteredAddress() {
     });
 }
 
+//Changes the text above the side panel to say "C-Groups near " selected location/address
 function cGroupInfo(location) {
     var temp = "C-Groups Near " + location;
     document.getElementById("side-panel-title").innerHTML = temp;
 }
 
-function pullData() {
-    var sheetSrc = "https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8/edit?ts=57e15ae1#gid=2042134768";
-}
-
+//initializes C-Groups that exist on campus in known and consistant locations from year to year
 function initializeCGroups() {
     initLinden();
     initMaple();
@@ -313,13 +419,18 @@ function initBuchanan() {
 
 }
 
-function generateCGroupPanel() {
-    var html = '<div class="cgroup-panel"><h5 id="location-time"></h5><button type="button" class="join-button pull-right">Join</button><p id="leader-names"></p><p id="address"></p></div>';
+//TODO unfinished but should take a c-group object in and add a C-Group panel into the side panel displaying the relevant information about the C-Group
+function generateCGroupPanel(cgObject) {
+    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.location + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.address + '</p></div>';
     var panel = document.getElementById("side-panel");
     panel.insertAdjacentHTML("beforeend", html);
 }
 
-// function createCGroup(location, leader1, leader2) {
-
-//     generateCGroupPanel(location);
-// }
+//Creates a string with all of the leaders for a given C-Group
+function leaderToString(cgObject) {
+    var leaderString = cgObject.leader[0];
+    for (i = 1; i < cgObject.leader.length(); i++) {
+        leaderString += '/' + cgObject.leader[i];
+    }
+    return leaderString;
+}
