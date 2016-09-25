@@ -200,6 +200,15 @@ function cGroupInfo(location) {
 // }
 
 /**
+* Load Sheets API client library.
+*/
+function loadSheetsApi() {
+    var discoveryUrl =
+        'https://sheets.googleapis.com/$discovery/rest?version=v4';
+    gapi.client.load(discoveryUrl);
+}
+
+/**
  * Grabs entire Google Sheet, and creates a cgroup
  * for every row in the sheet
  */
