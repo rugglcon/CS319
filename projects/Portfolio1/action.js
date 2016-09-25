@@ -8,6 +8,8 @@ var userLocation;
 var geocoder;
 var apiKey = "AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4";
 
+var sheetSrc = "https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8/edit?ts=57e15ae1#gid=2042134768";
+
 var CLIENT_ID = '769872060184-gon53at54dmqn7h54t4c38od6sru3nph.apps.googleusercontent.com';
 
 /* API key to access Google Sheets API */
@@ -181,7 +183,46 @@ function cGroupInfo(location) {
     document.getElementById("side-panel-title").innerHTML = temp;
 }
 
+// function getLeaders(cgroup) {
+//     gapi.client.sheets.spreadsheets.values.get({
+//         spreadsheetId: spreadsheetID,
+//         range: 'cgroups!A1:B10',
+//     }).then(function(response) {
+//         var range = response.result;
+//         if(range.values.length > 0) {
+//             for(i = 0; i < range.values.length; i++) {
+//                 var row = range.values[i];
+//                 cgroup.addLeader(row[0]);
+//                 cgroup.addLeader(row[1]);
+//             }
+//         }
+//     });
+// }
 
+/**
+ * Grabs entire Google Sheet, and creates a cgroup
+ * for every row in the sheet
+ */
+function pullData() {
+    gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: spreadsheetID,
+        range: 'cgroups!A1:H',
+    }).then(function(response) {
+        var range = response.result;
+        if(range.values.length > 0) {
+            for(i = 0; i < range.values.length; i++) {
+                var row = range.values[i];
+                var tmpGroup = new cGroup();
+                tmpGroup.addLeader(row[0]);
+                tmpGroup.addLeader(row[1]);
+                tmpGroup.addEmail(row[2]);
+                tmpGroup.addPhone(row[3]);
+                tmpGroup.addTime(row[4]);
+                tmpGroup.addLoc(row[5]);
+            }
+        }
+    });
+}
 
 /**
  * Creates a cGroup() object and defines function properties.
@@ -206,6 +247,8 @@ function cGroup() {
 
     /**
      * Sets email
+     * 
+     * @param {string} contact email
      */
     this.addEmail = function(email) {
         this.email = email;
@@ -213,20 +256,26 @@ function cGroup() {
 
     /**
      * Sets phone number
+     * 
+     * @param {string} contact phone number
      */
     this.addPhone = function(phoneNumber) {
         this.phone = phoneNumber;
     };
 
     /**
-     * Sets time for this group. should be given as a String
+     * Sets time for this group
+     * 
+     * @param {string} time that the group will be meeting
      */
     this.addTime = function(time) {
         this.time = time;
     };
 
     /**
-     * Sets this location to 'loc'. should be given as a String
+     * Sets this location to 'loc'
+     * 
+     * @param {string}
      */
     this.addLoc = function(loc) {
         this.location = loc;
@@ -240,7 +289,9 @@ function cGroup() {
     };
 
     /**
-     * Adds the leader to the leader array. parameters should be strings
+     * Adds the leader to the leader array
+     * 
+     * @param {string}
      */
     this.addLeader = function(leader) {
         this.leaders[this.leaders.length] = leader;
@@ -253,15 +304,7 @@ function cGroup() {
     this.addMember = function(){numMembers++;};
 }
 
-/**
- * Probably going to add more functions for this kind of thing,
- * but at least this will give a simple template of sorts.
- */
-function pullData() {
-    var sheetSrc = "https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8/edit?ts=57e15ae1#gid=2042134768";
-    var tmpGroup = new cGroup();
-    tmpGroup.addLeader("John Doe");
-}
+
 
 function initializeCGroups() {
     initLinden();
