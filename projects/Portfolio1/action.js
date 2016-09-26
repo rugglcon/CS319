@@ -16,8 +16,14 @@ var sheetSrc = "https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcv
 var CLIENT_ID = '769872060184-gon53at54dmqn7h54t4c38od6sru3nph.apps.googleusercontent.com';
 var SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 
-/* API key to access Google Sheets API */
-var sheetsAPIKey = "AIzaSyA2fSUmxTZAp0y5I5GXWP2c30WIFIFyxBo";
+/* API key to access Google Sheets API with account whiterun.thane753@gmail.com */
+var sheetsAPIKey = 'AIzaSyA2fSUmxTZAp0y5I5GXWP2c30WIFIFyxBo';
+
+/* API key to access Google Sheets with account cruggles@iastate.edu */
+var rugglesSheetsAPIKey = 'AIzaSyCk-GAaktP5Qf2WwrNnKOVCdQWtuExhOpU';
+
+/* Same deal for this client ID */
+var rugglesClientID = '454351574206-g5v6n65tmltp64elhj7jnl9qtecra57s.apps.googleusercontent.com';
 
 /* ID for the spreadsheet */
 var spreadsheetID = '1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8';
@@ -164,6 +170,7 @@ window.onload = function() {
             goToEnteredAddress();
         }
     })
+    pullData();
 }
 
 function goToEnteredAddress() {
@@ -254,6 +261,8 @@ function loadSheetsApi() {
     gapi.client.load(discoveryUrl);
 }
 
+var allCGroups = new Array();
+
 /**
  * Grabs entire Google Sheet, and creates a cgroup
  * for every row in the sheet
@@ -274,6 +283,13 @@ function pullData() {
                 tmpGroup.addPhone(row[3]);
                 tmpGroup.addTime(row[4]);
                 tmpGroup.addLoc(row[5]);
+                tmpGroup.addArea(row[6]);
+
+                allCGroups[i] = tmpGroup;
+
+                document.getElementById('location-time').innerHTML = tmpGroup.time;
+                document.getElementById('leader-names').innerHTML = tmpGroup.leaders[0] + '/' + tmpGroup.leaders[1];
+                document.getElementById('address').innerHTML = tmpGroup.location;
             }
         }
     });
@@ -299,6 +315,12 @@ function cGroup() {
     // number of members, someone joining this group 
     // will just increment by 1
     this.numMembers = 0;
+
+    this.area = "";
+
+    this.addArea = function(area) {
+        this.area = area;
+    };
 
     /**
      * Sets email
