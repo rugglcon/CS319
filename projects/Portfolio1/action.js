@@ -20,7 +20,7 @@ var SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 var sheetsAPIKey = "AIzaSyA2fSUmxTZAp0y5I5GXWP2c30WIFIFyxBo";
 
 /* ID for the spreadsheet */
-var spreadsheetID = "1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8";
+var spreadsheetID = '1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8';
 
 function initializeISU() {
     initialize(42.027005, -93.646661, 15);
