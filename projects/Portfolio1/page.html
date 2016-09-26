@@ -12,16 +12,16 @@
 </head>
 
 <body class="page-background">
-    <div id="authorize-div" style="display: none">
-        <span>Authorize access to Google Sheets API</span>
-            <!--Button for the user to click to initiate auth sequence-->
-        <button id="authorize-button" onclick="handleAuthClick(event)">
-            Authorize
-        </button>
-    </div>
     <div class="container-fluid">
         <div class="row">
             <header>
+                <div id="authorize-div" style="display: none">
+                    <span>Authorize access to Google Sheets API</span>
+                        <!--Button for the user to click to initiate auth sequence-->
+                        <button id="authorize-button" onclick="handleAuthClick(event)">
+                        Authorize
+                        </button>
+                </div>
                 <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                     <h1 class="page-title">Salt C-Group Signup</h1>
                     <p class="general-text">Look on the map to see which connection group you would like to join!</p>
