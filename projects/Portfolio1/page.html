@@ -12,6 +12,13 @@
 </head>
 
 <body class="page-background">
+    <div id="authorize-div" style="display: none">
+        <span>Authorize access to Google Sheets API</span>
+            <!--Button for the user to click to initiate auth sequence -->
+        <button id="authorize-button" onclick="handleAuthClick(event)">
+            Authorize
+        </button>
+    </div>
     <div class="container-fluid">
         <div class="row">
             <header>
@@ -25,13 +32,7 @@
                 </div>
             </header>
         </div>
-        <div id="authorize-div" style="display: none">
-            <span>Authorize access to Google Sheets API</span>
-            <!--Button for the user to click to initiate auth sequence -->
-            <button id="authorize-button" onclick="handleAuthClick(event)">
-                Authorize
-            </button>
-        </div>
+
         <div class="row">
             <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                 <div class="row">
