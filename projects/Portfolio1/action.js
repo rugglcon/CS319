@@ -10,7 +10,11 @@ var apiKey = "AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4";
 
 var sheetSrc = "https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8/edit?ts=57e15ae1#gid=2042134768";
 
+/**
+ * Used for authentication
+ */
 var CLIENT_ID = '769872060184-gon53at54dmqn7h54t4c38od6sru3nph.apps.googleusercontent.com';
+var SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 
 /* API key to access Google Sheets API */
 var sheetsAPIKey = "AIzaSyA2fSUmxTZAp0y5I5GXWP2c30WIFIFyxBo";
@@ -198,6 +202,48 @@ function cGroupInfo(location) {
 //         }
 //     });
 // }
+
+/**
+ * Check if current user has authorized this application.
+ */
+function checkAuth() {
+  gapi.auth.authorize(
+    {
+      'client_id': CLIENT_ID,
+      'scope': SCOPES.join(' '),
+      'immediate': true
+    }, handleAuthResult);
+}
+
+/**
+ * Handle response from authorization server.
+ *
+ * @param {Object} authResult Authorization result.
+ */
+function handleAuthResult(authResult) {
+  var authorizeDiv = document.getElementById('authorize-div');
+  if (authResult && !authResult.error) {
+    // Hide auth UI, then load client library.
+    authorizeDiv.style.display = 'none';
+    loadSheetsApi();
+  } else {
+    // Show auth UI, allowing the user to initiate authorization by
+    // clicking authorize button.
+    authorizeDiv.style.display = 'inline';
+  }
+}
+
+/**
+ * Initiate auth flow in response to user clicking authorize button.
+ *
+ * @param {Event} event Button click event.
+ */
+function handleAuthClick(event) {
+  gapi.auth.authorize(
+    {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+    handleAuthResult);
+  return false;
+}
 
 /**
 * Load Sheets API client library.
