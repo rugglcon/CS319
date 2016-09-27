@@ -2,7 +2,7 @@ var map;
 var marksFace = '../Images/salt_teal_white_border.png';
     new google.maps.Size(40, 40),
     new google.maps.Point(0, 0),
-    new google.maps.Point(20, 20));
+    new google.maps.Point(20, 20);
 var userLocation;
 var geocoder;
 var apiKey = "AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4";
@@ -250,7 +250,13 @@ window.onload = function() {
             goToEnteredAddress();
         }
     })
+
+    loadSheetsApi();
     pullData();
+    //TODO change this to only load groups at current location
+    // for(j = 0; j < allCGroups.length; j++) {
+    //     generateCGroupPanel(allCGroups[j]);
+    // }
 
     function openModal() {
         modal.style.display = "block";
@@ -416,12 +422,19 @@ function pullData() {
 
                 allCGroups[i] = tmpGroup;
 
-                document.getElementById('location-time').innerHTML = tmpGroup.time;
-                document.getElementById('leader-names').innerHTML = tmpGroup.leaders[0] + '/' + tmpGroup.leaders[1];
-                document.getElementById('address').innerHTML = tmpGroup.location;
+                // document.getElementById('location-time').innerHTML = tmpGroup.time;
+                // document.getElementById('leader-names').innerHTML = tmpGroup.leaders[0] + '/' + tmpGroup.leaders[1];
+                // document.getElementById('address').innerHTML = tmpGroup.location;
             }
         }
     });
+}
+
+/**
+ * handles submitting modal
+ */
+function submitForm(cgObject) {
+    cgObject.addMember;
 }
 
 /**
@@ -446,6 +459,12 @@ function cGroup() {
     this.numMembers = 0;
 
     this.area = "";
+
+    this.ID = "";
+
+    this.addID = function() {
+        this.ID += allCGroups.length;
+    };
 
     this.addArea = function(area) {
         this.area = area;
@@ -648,15 +667,16 @@ function initBuchanan() {
 
 }
 
-//TODO unfinished but should take a c-group object in and add a C-Group panel into the side panel displaying the relevant information about the C-Group
+//TODO 
+//unfinished but should take a c-group object in and add a C-Group panel into the 
+//side panel displaying the relevant information about the C-Group
 function generateCGroupPanel(cgObject) {
-    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.location + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.address + '</p></div>';
+    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.area + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.location + '</p></div>';
     var panel = document.getElementById("side-panel");
     panel.insertAdjacentHTML("beforeend", html);
 }
 
 //Creates a string with all of the leaders for a given C-Group
-
 function leaderToString(cgObject) {
     var leaderString = cgObject.leaders[0];
     for (i = 1; i < cgObject.leader.length(); i++) {
