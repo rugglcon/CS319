@@ -30,6 +30,18 @@ var rugglesClientID = '454351574206-g5v6n65tmltp64elhj7jnl9qtecra57s.apps.google
 /* ID for the spreadsheet */
 var spreadsheetID = '1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8';
 
+
+/**
+* Load Sheets API client library.
+*/
+function loadSheetsApi() {
+    gapi.client.setApiKey(sheetsAPIKey);
+    var discoveryUrl =
+        'https://sheets.googleapis.com/$discovery/rest?version=v4';
+    gapi.client.load(discoveryUrl);
+    checkAuth();
+}
+
 function initializeISU() {
     initialize(42.027005, -93.646661, 15);
 }
@@ -387,14 +399,7 @@ function handleAuthClick(event) {
   return false;
 }
 
-/**
-* Load Sheets API client library.
-*/
-function loadSheetsApi() {
-    var discoveryUrl =
-        'https://sheets.googleapis.com/$discovery/rest?version=v4';
-    gapi.client.load(discoveryUrl);
-}
+
 
 var allCGroups = new Array();
 
