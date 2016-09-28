@@ -97,46 +97,78 @@ function goToCurrentLocation() {
 function goToRichardsonCourt() {
     initialize(42.024029, -93.639859, 17);
     cGroupInfo("Richardson Court");
+
+    searchArea("RCA");
 }
 
 function goToBuchanan() {
     initialize(42.022243, -93.643411, 19);
     cGroupInfo("Buchanan");
+
+    searchArea("Buchanan");
 }
 
 function goToNorth() {
     initialize(42.047757, -93.632436, 14);
     cGroupInfo("North Ames");
+
+    searchArea("Freddy");
 }
 
 function goToSouth() {
     initialize(42.015378, -93.645143, 14);
     cGroupInfo("South Ames");
+
+    searchArea("Towers");
 }
 
 function goToEast() {
     initialize(42.034114, -93.601174, 14);
     cGroupInfo("East Ames");
+
+    searchArea("East Ames");
 }
 
 function goToWest() {
     initialize(42.017865, -93.674740, 15);
     cGroupInfo("West Ames");
+
+    searchArea("West Ames");
 }
 
 function goToUnionDrive() {
     initialize(42.024147, -93.651688, 17);
     cGroupInfo("Union Drive");
+
+    searchArea("UDA");
 }
 
 function goToFreddy() {
     initialize(42.033877, -93.641563, 17);
     cGroupInfo("Frederickson Court");
+
+    searchArea("Freddy");
+
 }
 
 function goToGreek() {
     initialize(42.020898, -93.643505, 17);
     cGroupInfo("Greek");
+
+    searchArea("Greek");
+}
+
+/**
+ * Searches for groups with given area
+ */
+function searchArea(area) {
+    deleteCGroupPanels();
+
+    for(v = 0; v < allCGroups.length; v++) {
+        if(allCGroups[v].area == area) {
+            generateCGroupPanel(allCGroups[v]);
+        }
+    }
 }
 
 window.onload = function() {
@@ -294,13 +326,13 @@ function getData(range) {
         tmpGroup.addTime(row[4]);
         tmpGroup.addLoc(row[5]);
         tmpGroup.addArea(row[6]);
-        tmpGroup.addID();
+        tmpGroup.addID(i);
 
         allCGroups[i] = tmpGroup;
     }
-    if(allCGroups[0] != null) {
-        console.log("hey this worked");
-    }
+    // if(allCGroups[0] != null) {
+    //     console.log("hey this worked");
+    // }
 
     for(c = 0; c < 6; c++) {
         generateCGroupPanel(allCGroups[c]);
@@ -332,10 +364,10 @@ function cGroup() {
 
     this.area = "";
 
-    this.ID;
+    this.ID = "";
 
-    this.addID = function() {
-        this.ID = allCGroups.length;
+    this.addID = function(num) {
+        this.ID += num;
     };
 
     this.addArea = function(area) {
@@ -562,9 +594,16 @@ function initBuchanan() {
 
 //TODO unfinished but should take a c-group object in and add a C-Group panel into the side panel displaying the relevant information about the C-Group
 function generateCGroupPanel(cgObject) {
-    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.location + ' ' + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.address + '</p></div>';
+    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.location + ' ' + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.area + '</p></div>';
     var panel = document.getElementById("side-panel");
     panel.insertAdjacentHTML('beforeend', html);
+}
+
+function deleteCGroupPanels() {
+    var panels = document.getElementsByClassName('cgroup-panel');
+    while(panels[0]) {
+        panels[0].parentNode.removeChild(panels[0]);
+    }
 }
 
 //Creates a string with all of the leaders for a given C-Group
