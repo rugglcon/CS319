@@ -1,46 +1,18 @@
 var map;
-var marksFace = '../Images/salt_teal_white_border.png';
+var marksFace = new google.maps.MarkerImage('../Images/salt_teal_white_border.png',
     new google.maps.Size(40, 40),
     new google.maps.Point(0, 0),
-    new google.maps.Point(20, 20);
+    new google.maps.Point(20, 20));
 var userLocation;
 var geocoder;
-var apiKey = "AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4";
+var MAPSapiKey = "AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4";
 var modal;
 var span;
 var btn;
-
-var sheetSrc = "https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8/edit?ts=57e15ae1#gid=2042134768";
-
-/**
- * Used for authentication
- */
-var CLIENT_ID = '769872060184-gon53at54dmqn7h54t4c38od6sru3nph.apps.googleusercontent.com';
-var SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
-
-/* API key to access Google Sheets API with account whiterun.thane753@gmail.com */
-var sheetsAPIKey = 'AIzaSyA2fSUmxTZAp0y5I5GXWP2c30WIFIFyxBo';
-
-/* API key to access Google Sheets with account cruggles@iastate.edu */
-var rugglesSheetsAPIKey = 'AIzaSyCk-GAaktP5Qf2WwrNnKOVCdQWtuExhOpU';
-
-/* Same deal for this client ID */
-var rugglesClientID = '454351574206-g5v6n65tmltp64elhj7jnl9qtecra57s.apps.googleusercontent.com';
-
-/* ID for the spreadsheet */
-var spreadsheetID = '1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8';
-
-
-/**
-* Load Sheets API client library.
-*/
-function loadSheetsApi() {
-    gapi.client.setApiKey(sheetsAPIKey);
-    var discoveryUrl =
-        'https://sheets.googleapis.com/$discovery/rest?version=v4';
-    gapi.client.load(discoveryUrl);
-    checkAuth();
-}
+var allCGroups = new Array();
+var sheetsAPIKey = "AIzaSyB8etchYuqZ6vjFFXKulZZVBzhuz1nqUew";
+var sheetsClientID = "426312107480-mvsate2e7vjsosdeb8aa2hfotejlhhdg.apps.googleusercontent.com";
+var sheetsClientSecret = "zQybClul1_GZhvencNDlH-l1";
 
 function initializeISU() {
     initialize(42.027005, -93.646661, 15);
@@ -81,7 +53,7 @@ function initialize(givenLat, givenLon, givenZoom) {
 
     userLocation = new google.maps.Marker({
         position: new google.maps.LatLng(42.027005, -93.646661),
-        icon: "Images/location_icon_small.png"
+        icon: "../Images/location_icon_small.png"
     });
 
 
@@ -117,7 +89,7 @@ var listener1 = google.maps.event.addDomListener(window, 'load', function() {
     initializeISU();
 });
 
-//Centers the map to show the desired location
+//Centers the map to show the desied location
 function goToCurrentLocation() {
     map.setCenter(userLocation.position);
 }
@@ -167,23 +139,13 @@ function goToGreek() {
     cGroupInfo("Greek");
 }
 
-// var enteredAddressField;
-// $(docuemnt).ready(function() {
-//     enteredAddressField = document.getElementById("entered-address");
-//     enteredAddressField.addEventListener("keydown", function(event) {
-//         if (event.keyCode == 13) {
-//             goToEnteredAddress();
-//         }
-//     });
-// });
-
 window.onload = function() {
     modal = document.getElementById('signup');
     span = document.getElementById("close-modal");
     submit = document.getElementById('submit-modal');
-    btn = document.getElementById("btn1");
+    // btn = document.getElementById("btn1");
     selectYear = document.getElementById("year");
-    btn.onclick = openModal;
+    // btn.onclick = openModal;
     var name = document.getElementById("name");
     var email = document.getElementById("email");
     var phone = document.getElementById("phone");
@@ -263,16 +225,7 @@ window.onload = function() {
         }
     })
 
-    loadSheetsApi();
-    pullData();
-    //TODO change this to only load groups at current location
-    // for(j = 0; j < allCGroups.length; j++) {
-    //     generateCGroupPanel(allCGroups[j]);
-    // }
 
-    function openModal() {
-        modal.style.display = "block";
-    }
 
     function val(obj, bool) {
         if (!obj.validity.valid) {
@@ -319,127 +272,41 @@ window.onload = function() {
     }
 }
 
-function goToEnteredAddress() {
-    var address = document.getElementById("entered-address").value;
-    geocoder.geocode({ "address": address }, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            cGroupInfo(address.split(",", 1));
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
+function openModal() {
+    modal.style.display = "block";
 }
 
-//Changes the text above the side panel to say "C-Groups near " selected location/address
-function cGroupInfo(location) {
-    var temp = "C-Groups Near " + location;
-    document.getElementById("side-panel-title").innerHTML = temp;
-}
-
-// function getLeaders(cgroup) {
-//     gapi.client.sheets.spreadsheets.values.get({
-//         spreadsheetId: spreadsheetID,
-//         range: 'cgroups!A1:B10',
-//     }).then(function(response) {
-//         var range = response.result;
-//         if(range.values.length > 0) {
-//             for(i = 0; i < range.values.length; i++) {
-//                 var row = range.values[i];
-//                 cgroup.addLeader(row[0]);
-//                 cgroup.addLeader(row[1]);
-//             }
-//         }
-//     });
-// }
-
-/**
- * Check if current user has authorized this application.
- */
-function checkAuth() {
-  gapi.auth.authorize(
-    {
-      'client_id': CLIENT_ID,
-      'scope': SCOPES.join(' '),
-      'immediate': true
-    }, handleAuthResult);
+function submitForm() {
+    window.alert("Welcome to Salt!");
 }
 
 /**
- * Handle response from authorization server.
- *
- * @param {Object} authResult Authorization result.
+ * Gets data from spreadsheet
  */
-function handleAuthResult(authResult) {
-  var authorizeDiv = document.getElementById('authorize-div');
-  if (authResult && !authResult.error) {
-    // Hide auth UI, then load client library.
-    authorizeDiv.style.display = 'none';
-    loadSheetsApi();
-  } else {
-    // Show auth UI, allowing the user to initiate authorization by
-    // clicking authorize button.
-    authorizeDiv.style.display = 'inline';
-  }
-}
+function getData(range) {
+    for(i = 0; i < range.values.length; i++) {
+        var row = range.values[i];
+        var tmpGroup = new cGroup();
+        tmpGroup.addLeader(row[0]);
+        tmpGroup.addLeader(row[1]);
+        tmpGroup.addEmail(row[2]);
+        tmpGroup.addPhone(row[3]);
+        tmpGroup.addTime(row[4]);
+        tmpGroup.addLoc(row[5]);
+        tmpGroup.addArea(row[6]);
+        tmpGroup.addID();
 
-/**
- * Initiate auth flow in response to user clicking authorize button.
- *
- * @param {Event} event Button click event.
- */
-function handleAuthClick(event) {
-  gapi.auth.authorize(
-    {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
-    handleAuthResult);
-  return false;
-}
+        allCGroups[i] = tmpGroup;
+    }
+    if(allCGroups[0] != null) {
+        console.log("hey this worked");
+    }
 
-
-
-var allCGroups = new Array();
-
-/**
- * Grabs entire Google Sheet, and creates a cgroup
- * for every row in the sheet
- */
-function pullData() {
-    gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: spreadsheetID,
-        range: 'cgroups!A1:H',
-    }).then(function(response) {
-        var range = response.result;
-        if(range.values.length > 0) {
-            for(i = 0; i < range.values.length; i++) {
-                var row = range.values[i];
-                var tmpGroup = new cGroup();
-                tmpGroup.addLeader(row[0]);
-                tmpGroup.addLeader(row[1]);
-                tmpGroup.addEmail(row[2]);
-                tmpGroup.addPhone(row[3]);
-                tmpGroup.addTime(row[4]);
-                tmpGroup.addLoc(row[5]);
-                tmpGroup.addArea(row[6]);
-
-                allCGroups[i] = tmpGroup;
-
-                // document.getElementById('location-time').innerHTML = tmpGroup.time;
-                // document.getElementById('leader-names').innerHTML = tmpGroup.leaders[0] + '/' + tmpGroup.leaders[1];
-                // document.getElementById('address').innerHTML = tmpGroup.location;
-            }
-        }
-    });
-}
-
-/**
- * handles submitting modal
- */
-function submitForm(cgObject) {
-    cgObject.addMember;
+    for(c = 0; c < 6; c++) {
+        generateCGroupPanel(allCGroups[c]);
+        btn = document.getElementById("cgroup"+allCGroups[c].ID);
+        btn.onclick = openModal;
+    }
 }
 
 /**
@@ -465,10 +332,10 @@ function cGroup() {
 
     this.area = "";
 
-    this.ID = "";
+    this.ID;
 
     this.addID = function() {
-        this.ID += allCGroups.length;
+        this.ID = allCGroups.length;
     };
 
     this.addArea = function(area) {
@@ -534,6 +401,27 @@ function cGroup() {
     this.addMember = function(){numMembers++;};
 }
 
+function goToEnteredAddress() {
+    var address = document.getElementById("entered-address").value;
+    geocoder.geocode({ "address": address }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+            cGroupInfo(address.split(",", 1));
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
+//Changes the text above the side panel to say "C-Groups near " selected location/address
+function cGroupInfo(location) {
+    var temp = "C-Groups Near " + location;
+    document.getElementById("side-panel-title").innerHTML = temp;
+}
 
 //initializes C-Groups that exist on campus in known and consistant locations from year to year
 function initializeCGroups() {
@@ -672,19 +560,17 @@ function initBuchanan() {
 
 }
 
-//TODO 
-//unfinished but should take a c-group object in and add a C-Group panel into the 
-//side panel displaying the relevant information about the C-Group
+//TODO unfinished but should take a c-group object in and add a C-Group panel into the side panel displaying the relevant information about the C-Group
 function generateCGroupPanel(cgObject) {
-    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.area + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.location + '</p></div>';
+    var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.location + ' ' + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.address + '</p></div>';
     var panel = document.getElementById("side-panel");
-    panel.insertAdjacentHTML("beforeend", html);
+    panel.insertAdjacentHTML('beforeend', html);
 }
 
 //Creates a string with all of the leaders for a given C-Group
 function leaderToString(cgObject) {
     var leaderString = cgObject.leaders[0];
-    for (i = 1; i < cgObject.leader.length(); i++) {
+    for (i = 1; i < cgObject.leaders.length; i++) {
         leaderString += '/' + cgObject.leaders[i];
     }
     return leaderString;
