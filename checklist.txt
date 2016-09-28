@@ -1,0 +1,7 @@
+The application needs to be run in a pretty specific way. 
+
+First, extract the full CS319 directory to some place on your file system. Then, run this command in a terminal from the CS319 directory: “python -m SimpleHTTPServer 8000”. Then, go into a web browser and navigate to: “localhost:8000/projects/Portfolio1/page.html”. That will get the project running.
+
+It will ask for authentication, and if you use your ISU email address you will be able to access it from this link: https://docs.google.com/spreadsheets/d/1UlBlLoto8QNT3558MwLjgbcvuhQUH9GXQmspBaoVaJ8/edit?usp=sharing
+
+The reason this is so oddly specific is that the Sheets API requires not only for the developer to have access to the sheet and have API keys and things like that, but also for whoever is running the application to have access to the sheet. So unless the instructions are followed closely, you won't be able to run our application.
