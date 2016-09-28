@@ -14,6 +14,11 @@ var sheetsAPIKey = "AIzaSyB8etchYuqZ6vjFFXKulZZVBzhuz1nqUew";
 var sheetsClientID = "426312107480-mvsate2e7vjsosdeb8aa2hfotejlhhdg.apps.googleusercontent.com";
 var sheetsClientSecret = "zQybClul1_GZhvencNDlH-l1";
 
+//when a marker is clicked, the first panels will be in that hall, then
+//surrounding ones
+
+//create markers for groups not on campus
+
 function initializeISU() {
     initialize(42.027005, -93.646661, 15);
 }
@@ -89,7 +94,7 @@ var listener1 = google.maps.event.addDomListener(window, 'load', function() {
     initializeISU();
 });
 
-//Centers the map to show the desied location
+//Centers the map to show the desired location
 function goToCurrentLocation() {
     map.setCenter(userLocation.position);
 }
@@ -167,6 +172,9 @@ function searchArea(area) {
     for(v = 0; v < allCGroups.length; v++) {
         if(allCGroups[v].area == area) {
             generateCGroupPanel(allCGroups[v]);
+        }
+        if(area == "Freddy" || area == "Greek" || area == "West Ames" || area == "East Ames" || area == "Towers") {
+            initNewMarker(allCGroups[v]);
         }
     }
 }
@@ -469,6 +477,28 @@ function initializeCGroups() {
     initOakElm();
     initMartin();
     initEaton();
+}
+
+function initNewMarker(cgObject) {
+    var geo = new google.maps.Geocoder();
+    geo.geocode({
+        "address": cgObject.location},
+        function(results, status) {
+            if(status == google.maps.GeocoderStatus.OK) {
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+
+                var newMarker = new google.maps.Marker({
+                    position: results[0].geometry.location,//new google.maps.LatLng(latitude, longitude),
+                    icon: marksFace
+                });
+                newMarker.setMap(map);
+                newMarker.addListener("click", function() {
+                cGroupInfo(cgObject.area);
+                });
+            }
+        }
+    )
 }
 
 function initLinden() {
