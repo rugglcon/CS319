@@ -300,6 +300,7 @@ window.onload = function() {
         if (bool) {
             //TODO - the information within the modal must be transfered into the database
             modal.style.display = "none";
+            submitForm();
         }
     }
 }
@@ -309,7 +310,7 @@ function openModal() {
 }
 
 function submitForm() {
-    window.alert("Welcome to Salt!");
+    alert("Welcome to Salt!");
 }
 
 /**
