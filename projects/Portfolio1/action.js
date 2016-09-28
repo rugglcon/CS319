@@ -14,10 +14,6 @@ var sheetsAPIKey = "AIzaSyB8etchYuqZ6vjFFXKulZZVBzhuz1nqUew";
 var sheetsClientID = "426312107480-mvsate2e7vjsosdeb8aa2hfotejlhhdg.apps.googleusercontent.com";
 var sheetsClientSecret = "zQybClul1_GZhvencNDlH-l1";
 
-//when a marker is clicked, the first panels will be in that hall, then
-//surrounding ones
-
-//create markers for groups not on campus
 
 function initializeISU() {
     initialize(42.027005, -93.646661, 15);
@@ -124,7 +120,7 @@ function goToSouth() {
     initialize(42.015378, -93.645143, 14);
     cGroupInfo("South Ames");
 
-    searchArea("Towers");
+    searchArea("Towers", "Campustown");
 }
 
 function goToEast() {
@@ -160,20 +156,26 @@ function goToGreek() {
     initialize(42.020898, -93.643505, 17);
     cGroupInfo("Greek");
 
-    searchArea("Greek");
+    searchArea("Greek", "Campustown");
 }
 
 /**
  * Searches for groups with given area
  */
-function searchArea(area) {
+function searchArea(area1, area2) {
     deleteCGroupPanels();
 
     for(v = 0; v < allCGroups.length; v++) {
-        if(allCGroups[v].area == area) {
+        if(allCGroups[v].area == area1 || allCGroups[v].area == area2) {
             generateCGroupPanel(allCGroups[v]);
+            btn = document.getElementById("cgroup"+allCGroups[v].ID);
+            btn.onclick = openModal;
+
+            initNewMarker(allCGroups[v]);
         }
-        if(area == "Freddy" || area == "Greek" || area == "West Ames" || area == "East Ames" || area == "Towers") {
+        if(area1 == "Freddy" || area1 == "Greek" || area1 == "West Ames" || area1 == "East Ames" || 
+            area1 == "Towers" || area2 == "Freddy" || area2 == "Greek" || area2 == "West Ames" || 
+            area2 == "East Ames" || area2 == "Towers") {
             initNewMarker(allCGroups[v]);
         }
     }
@@ -317,6 +319,9 @@ function openModal() {
     modal.style.display = "block";
 }
 
+/**
+ * makes a popup telling the student they have joined a group
+ */
 function submitForm() {
     alert("Welcome to Salt!");
 }
@@ -479,27 +484,31 @@ function initializeCGroups() {
     initEaton();
 }
 
+/**
+ * Sets a marker at the given objects location
+ */
 function initNewMarker(cgObject) {
     var geo = new google.maps.Geocoder();
-    geo.geocode({
-        "address": cgObject.location},
+    geo.geocode({"address": cgObject.location},
         function(results, status) {
             if(status == google.maps.GeocoderStatus.OK) {
                 var latitude = results[0].geometry.location.lat();
                 var longitude = results[0].geometry.location.lng();
 
                 var newMarker = new google.maps.Marker({
-                    position: results[0].geometry.location,//new google.maps.LatLng(latitude, longitude),
+                    map: map,
+                    position: results[0].geometry.location,
                     icon: marksFace
                 });
                 newMarker.setMap(map);
                 newMarker.addListener("click", function() {
-                cGroupInfo(cgObject.area);
+                    cGroupInfo(cgObject.area);
                 });
             }
         }
     )
 }
+
 
 function initLinden() {
     var Linden = new google.maps.Marker({
@@ -623,13 +632,14 @@ function initBuchanan() {
 
 }
 
-//TODO unfinished but should take a c-group object in and add a C-Group panel into the side panel displaying the relevant information about the C-Group
+//take a c-group object in and add a C-Group panel into the side panel displaying the relevant information about the C-Group
 function generateCGroupPanel(cgObject) {
     var html = '<div class="cgroup-panel"><h5 id="location-time">' + cgObject.location + ' ' + cgObject.time + '</h5><button type="button" class="join-button pull-right" id="cgroup' + cgObject.ID + '">Join</button><p id="leader-names">' + leaderToString(cgObject) + '</p><p id="address">' + cgObject.area + '</p></div>';
     var panel = document.getElementById("side-panel");
     panel.insertAdjacentHTML('beforeend', html);
 }
 
+//reloads side panels
 function deleteCGroupPanels() {
     var panels = document.getElementsByClassName('cgroup-panel');
     while(panels[0]) {
