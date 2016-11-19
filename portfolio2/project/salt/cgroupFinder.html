@@ -1,0 +1,161 @@
+<html>
+<meta charset=utf-8>
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.css">
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB2mnvZqIZXdQYIy7jZu31JQLnhhgKFjJ4"></script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="action.js"></script>
+    <script src="cgfinder.js"></script>
+    <script>
+        $(document).ready(function() {
+            //login();
+            pullData(false);
+        });
+    </script>
+    <title>Salt C-Group Signup</title>
+</head>
+
+<body class="page-background">
+    <div id="login">
+        <button onclick="login()">Login</button>
+        <form id="login-form" method="POST" action="login.php">
+            <label for="username">Username:</label>
+            <input name="username" type="text"></input>
+            <label for="password">Password:</label>
+            <input name="password" type="password"></input>
+            <button id="leader-login-btn" type="submit">Login</button>
+        </form>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <header>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                    <h1 class="page-title">Salt C-Group Signup</h1>
+                    <p class="general-text">Look on the map to see which connection group you would like to join!</p>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <h1 id="side-panel-title">C-Groups On Campus</h2>
+                        <p id="side-panel-text" class="general-text">Check out the groups by you!</p>
+                </div>
+            </header>
+        </div>
+        <div class="row">
+            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                <div class="row">
+                    <div id="googleMap"></div>
+                </div>
+                <div class="row text-center">
+                    <form id="loc-form">
+                        <div class="form-group">
+                            <button type="button" class="location-button" onclick="goToRichardsonCourt()">Richardson Court</button>
+                            <button type="button" class="location-button" onclick="goToUnionDrive()">Union Drive Area</button>
+                            <button type="button" class="location-button" onclick="goToBuchanan()">Buchanan</button>
+                            <button type="button" class="location-button" onclick="goToFreddy()">Frederickson Court</button>
+                            <button type="button" class="location-button" onclick="goToGreek()">Greek</button>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="location-button" onclick="goToNorth()">North Ames</button>
+                            <button type="button" class="location-button" onclick="goToEast()">East Ames</button>
+                            <button type="button" class="location-button" onclick="goToSouth()">South Ames</button>
+                            <button type="button" class="location-button" onclick="goToWest()">West Ames</button>
+                            <button type="button" class="location-button" onclick="goToCurrentLocation()">Current Location</button>
+                        </div>
+                        <div class="form-group">
+                            <label class="label1" for="entered-address">Enter Address:</label>
+                            <input id="entered-address" type="text">
+                            <button type="button" class="location-button follows-input" onclick="goToEnteredAddress()">Go To Address</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <div id="cgInfoContent" class="dont-display"></div>
+                <div class="side-panel" id="side-panel"></div>
+            </div>
+        </div>
+        <div id="signup" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span id="close-modal" class="close">&times;</span>
+                    <h4 class="modal-title">C-Group Signup</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Please fill in all fields.</p>
+                    <form class="modal-form" id="modal-form" action="signup_student.php" method="POST">
+                        <div>
+                            <div class="form-group">
+                                <label class="modal-label" for="name">Name:</label>
+                                <input required name="name" id="name" type="text" pattern="[A-Z,a-z ]{1,}">
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="email">Email:</label>
+                                <input required name="email" id="email" type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}">
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="phone">Phone:</label>
+                                <input required name="phone" id="phone" type="text" pattern="[0-9]{10}|[0-9]{3}[-]\d{3}[\-]\d{4}">
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="gender">Gender:</label>
+                                <select required name="gender" id="gender" class="modal-dropdown">
+                                    <option value="">-- Select --</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="location">Location:</label>
+                                <select required name="location" id="location" class="modal-dropdown">
+                                    <option value="">-- Select --</option>
+                                    <option value="rca">Richardson Court Area</option>
+                                    <option value="uniondrive">Union Drive</option>
+                                    <option value="greek">Greek</option>
+                                    <option value="mwl">Maple/Willow/Larch</option>
+                                    <option value="buchanan">Buchanan</option>
+                                    <option value="towers">Towers</option>
+                                    <option value="east">East Ames</option>
+                                    <option value="west">West Ames</option>
+                                    <option value="north">North Ames</option>
+                                    <option value="south">South Ames</option>
+                                    <option value="freddy">Freddy</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="modal-label" for="year">Year:</label>
+                                <select required name="year" id="year" class="modal-dropdown">
+                                    <option value="">-- Select --</option>
+                                    <option value="freshman">Freshman</option>
+                                    <option value="sophomore">Sophomore</option>
+                                    <option value="Junior">Junior</option>
+                                    <option value="Senior">Senior</option>
+                                    <option value="grad">Grad</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="otherDiv">
+                                <label class="modal-label" for="other-explanation">Explain:</label>
+                                <input id="other-explanation" type="text">
+                            </div>
+                            <div class="form-group">
+                                <label id="check-label" class="modal-label" for="new">New To Salt?</label>
+                                <input name="new" id="new" type="checkbox"></input>
+                            </div>
+                            <div class="form-group dont-display">
+                                <input type="text" id="groupID" name="groupID">
+                            </div>
+                        </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-default" id="submit-modal">Submit</button>
+                      </div>
+                    </form>
+                </div>
+              </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+/*Sets background color and padding ammount*/
+
+.page-background {
+    padding: 25px;
+    background-color: white;
+}
+
+/*login box*/
+#login {
+    text-align: right;
+    position: relative;
+    right: 0px;
+}
+
+#login-form {
+    display: none;
+    position: relative;
+    right: 0px;
+    text-align: right;
+}
+
+/*Font style*/
+
+.page-title {
+    color: #676767;
+    font-weight: lighter;
+}
+
+
+/*Font style*/
+
+.general-text {
+    color: #676767;
+    font-weight: lighter;
+}
+
+
+/*Font style*/
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+}
+
+
+/*Sets style for location buttons, when clicked, and when being hovered over*/
+
+.location-button {
+    width: 137px;
+    height: 24px;
+    border: 1px solid #ABABAB;
+    background-color: white;
+}
+
+.location-button:hover {
+    background-color: #9AC3FC;
+}
+
+.location-button::focus {
+    background-color: #5555FF;
+}
+
+
+/*Sets the position for the button which follows the location search input*/
+
+.follows-input {
+    position: relative;
+    top: 1px;
+}
+
+
+/*Sets the style for the side panel*/
+
+.side-panel
+{
+    background-color: white;
+    border: 1px solid #ABABAB;
+    border-radius: 3px;
+    height: 500px;
+    margin-left: 20px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+
+/*Sets style for side-panel-title*/
+
+#side-panel-title {
+    font-weight: lighter;
+    position: relative;
+    left: 20px;
+}
+
+
+/*Sets the style for the c-group panels which are inside of the side panel*/
+
+.cgroup-panel,
+.cgroup-area {
+    margin: 2px;
+    padding: 0 10px 0 10px;
+    background-color: #EFEFEF;
+    border: 1px solid #ABABAB;
+    border-radius: 3px;
+    height: 100px;
+}
+
+
+/*Sets the size of the google map*/
+
+#googlemap {
+    margin: 0 0px 10px 15px;
+    height: 500px;
+    width: 100%;
+}
+
+
+/*Overrides the bold text inherant for label types*/
+
+.label1 {
+    font-weight: normal;
+}
+
+
+/*Sets width and location of entered-address field*/
+
+#entered-address {
+    position: relative;
+    right: 0;
+    width: 464px;
+}
+
+
+/*Sets style for all text inputs - including when it gets highlighted*/
+
+input[type="text"] {
+    width: 200px;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid #ABABAB;
+}
+
+input[type=text]:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.join-button {
+    position: relative;
+    top: -25px;
+    border: 1px solid #ABABAB;
+    border-radius: 3px;
+    background-color: white;
+}
+
+#side-panel-text {
+    position: relative;
+    left: 20px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 8.5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 350px;
+}
+
+
+/* The Close Button */
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-label {
+    width: 70px;
+}
+
+#otherDiv {
+    display: none;
+}
+
+.modal-dropdown {
+    width: 200px;
+    border-color: #ABABAB;
+}
+
+.modal-dropdown:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+#loc-form {
+    margin-left: 15px;
+}
+
+#output {
+    display: none;
+}
+
+.dont-display {
+    display: none;
+}
+
+#check-label {
+    width: 200px;
+}
+
+#new {
+    position: relative;
+    right: 100px;
+}
